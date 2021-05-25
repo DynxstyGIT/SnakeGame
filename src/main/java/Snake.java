@@ -1,3 +1,4 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
@@ -33,8 +34,10 @@ public class Snake extends JFrame {
         setTitle("Snake");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        ImageIcon imageIcon = new ImageIcon("src/resources/images/snakegameicon.png");
-        setIconImage(imageIcon.getImage());
+
+        try {
+            setIconImage(ImageIO.read(getClass().getClassLoader().getResourceAsStream("images/snakegameicon.png")));
+        } catch (Exception ignored) {}
 
             JMenuBar mb = new JMenuBar();
             JMenu menu = new JMenu("Options");
