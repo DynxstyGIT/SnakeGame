@@ -1,3 +1,5 @@
+package com.dynxsty.snakegame;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -31,7 +33,7 @@ public class Snake extends JFrame {
         setResizable(false);
         pack();
 
-        setTitle("Snake");
+        setTitle("com.dynxsty.snakegame.Snake");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

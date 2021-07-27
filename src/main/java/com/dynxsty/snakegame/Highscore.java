@@ -1,3 +1,4 @@
+package com.dynxsty.snakegame;
 
 import javax.crypto.*;
 import javax.crypto.spec.DESKeySpec;

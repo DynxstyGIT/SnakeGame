@@ -1,3 +1,5 @@
+package com.dynxsty.snakegame;
+
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -9,7 +11,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.InputStream;
 
 public class Game extends JPanel implements ActionListener {
@@ -114,8 +115,8 @@ public class Game extends JPanel implements ActionListener {
     private void gameOver(Graphics g) {
 
         String msgRestart = "Press SPACE to restart";
-        String msgHighscore = "New Highscore!";
-        String msgGameOver = "Game Over";
+        String msgHighscore = "New com.dynxsty.snakegame.Highscore!";
+        String msgGameOver = "com.dynxsty.snakegame.Game Over";
 
         g.drawString(msgGameOver, (B_WIDTH - fontMetrics(g, 60f, new Color(0xff5e5e)).stringWidth(msgGameOver)) / 2, 120);
         g.drawString(msgRestart, (B_WIDTH - fontMetrics(g, 20f, Color.WHITE).stringWidth(msgRestart)) / 2, 550);
@@ -201,7 +202,7 @@ public class Game extends JPanel implements ActionListener {
     private void pauseGame(Graphics g) {
 
         paused = true;
-        String msgPause = "Game paused";
+        String msgPause = "com.dynxsty.snakegame.Game paused";
         g.drawString(msgPause, (B_WIDTH - fontMetrics(g, 40f, new Color(0xff5e5e)).stringWidth(msgPause)) / 2, B_HEIGHT / 2);
     }
 
