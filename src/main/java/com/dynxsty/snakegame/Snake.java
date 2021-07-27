@@ -26,9 +26,8 @@ public class Snake extends JFrame {
 
     private void initUI() {
 
-        try {
-            add(new Game());
-        } catch (Exception e) { e.printStackTrace(); }
+        try { add(new Game()); }
+        catch (Exception e) { e.printStackTrace(); }
 
         setResizable(false);
         pack();

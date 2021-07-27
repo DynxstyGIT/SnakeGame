@@ -12,6 +12,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
+import java.util.Objects;
 
 public class Game extends JPanel implements ActionListener {
 
@@ -22,8 +23,8 @@ public class Game extends JPanel implements ActionListener {
     private final int RAND_POS = 10;
     private int DELAY = 320;
 
-    private final int x[] = new int[ALL_DOTS];
-    private final int y[] = new int[ALL_DOTS];
+    private final int[] x = new int[ALL_DOTS];
+    private final int[] y = new int[ALL_DOTS];
 
     private int bodyParts, pointX, pointY, score, level;
     private String highscore;
@@ -55,9 +56,9 @@ public class Game extends JPanel implements ActionListener {
 
         try {
 
-            body = ImageIO.read(getClass().getClassLoader().getResourceAsStream("images/body.png"));
-            point = ImageIO.read(getClass().getClassLoader().getResourceAsStream("images/point.png"));
-            head = ImageIO.read(getClass().getClassLoader().getResourceAsStream("images/head.png"));
+            body = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("images/body.png")));
+            point = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("images/point.png")));
+            head = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("images/head.png")));
 
         } catch (Exception ignored) {}
 
@@ -118,7 +119,7 @@ public class Game extends JPanel implements ActionListener {
         String msgHighscore = "New Highscore!";
         String msgGameOver = "Game Over";
 
-        g.drawString(msgGameOver, (B_WIDTH - fontMetrics(g, 60f, new Color(0xff5e5e)).stringWidth(msgGameOver)) / 2, 120);
+        g.drawString(msgGameOver, (B_WIDTH - fontMetrics(g, 60f, new Color(Constants.COLOR_WHITE)).stringWidth(msgGameOver)) / 2, 320);
         g.drawString(msgRestart, (B_WIDTH - fontMetrics(g, 20f, Color.WHITE).stringWidth(msgRestart)) / 2, 550);
         playSound("explosion.wav");
 
@@ -168,7 +169,11 @@ public class Game extends JPanel implements ActionListener {
     private void checkCollision() {
 
         for (int i = bodyParts; i > 0; i--) {
-            if ((i > 5) && (x[0] == x[i] && (y[0] == y[i]))) { inGame = false; }
+
+            if ((x[0] == x[i] && (y[0] == y[i]))) {
+                inGame = false;
+                break;
+            }
         }
 
         if (y[0] > B_HEIGHT) { y[0] = 50; }
@@ -185,25 +190,14 @@ public class Game extends JPanel implements ActionListener {
     private void spawnPoint() {
 
         pointX = genRandomX();
-        pointY = genRandomY() + 50;
-
-        /*for (int i = bodyParts; i > 0; i--) {
-            if (!(posX == x[i]) && !(posY == y[i])) {
-
-                pointX = posX;
-                pointY = posY;
-
-            } else {
-                spawnPoint();
-            }
-        }*/
+        pointY = genRandomY();
     }
 
     private void pauseGame(Graphics g) {
 
         paused = true;
         String msgPause = "Game paused";
-        g.drawString(msgPause, (B_WIDTH - fontMetrics(g, 40f, new Color(0xff5e5e)).stringWidth(msgPause)) / 2, B_HEIGHT / 2);
+        g.drawString(msgPause, (B_WIDTH - fontMetrics(g, 40f, new Color(Constants.COLOR_WHITE)).stringWidth(msgPause)) / 2, B_HEIGHT / 2);
     }
 
     private void renderBackground(Graphics g) {
@@ -218,13 +212,12 @@ public class Game extends JPanel implements ActionListener {
                 xCB = col * 40;
                 yCB = row * 40 + 50;
                 if ((row % 2) == (col % 2))
-                    g.setColor(new Color(0x060606));
+                    g.setColor(new Color(Constants.COLOR_BLACK));
                 else
-                    g.setColor(new Color(0x080808));
+                    g.setColor(new Color(Constants.COLOR_DARKER_BLACK));
 
                 g.fillRect(xCB, yCB, B_WIDTH, B_HEIGHT);
             }
-
         }
     }
 
@@ -234,9 +227,10 @@ public class Game extends JPanel implements ActionListener {
         if (inGame) {
             if (score >= Integer.parseInt(highscore)) highscore = String.valueOf(score);
 
+            move();
             checkPoint();
             checkCollision();
-            move();
+
         }
 
         repaint();
@@ -275,11 +269,7 @@ public class Game extends JPanel implements ActionListener {
 
             if ((key == KeyEvent.VK_ESCAPE) && (inGame)) {
 
-                if (paused) {
-                    paused = false;
-                } else {
-                    paused = true;
-                }
+                paused = !paused;
             }
 
             if ((key == KeyEvent.VK_SPACE) && (!inGame)) {
@@ -300,12 +290,13 @@ public class Game extends JPanel implements ActionListener {
 
     private static void playSound(String sound) {
 
-
         if (Snake.i1.getState()) {
 
             try {
 
                 InputStream audioSrc = Game.class.getClassLoader().getResourceAsStream("sounds/" + sound);
+
+                assert audioSrc != null;
                 InputStream bufferedIn = new BufferedInputStream(audioSrc);
 
                 AudioInputStream audioIn = AudioSystem.getAudioInputStream(bufferedIn);
@@ -313,16 +304,14 @@ public class Game extends JPanel implements ActionListener {
                 clip.open(audioIn);
                 clip.start();
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception e) { e.printStackTrace(); }
         }
     }
 
     public FontMetrics fontMetrics(Graphics g, float size, Color color) {
 
         Font font = null;
-        try { font = Font.createFont(Font.TRUETYPE_FONT, getClass().getClassLoader().getResourceAsStream("fonts/Early_GameBoy.ttf")).deriveFont(size); }
+        try { font = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("fonts/Early_GameBoy.ttf"))).deriveFont(size); }
         catch (Exception e) { e.printStackTrace(); }
 
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -339,7 +328,7 @@ public class Game extends JPanel implements ActionListener {
         int rand = (int) (Math.random() * RAND_POS);
         posY = ((rand * DOT_SIZE));
 
-        return posY;
+        return posY + 50;
     }
 
     private int genRandomX() {

@@ -9,8 +9,8 @@ import java.security.SecureRandom;
 public class Highscore {
 
     public static void write(int i){
-        try {
 
+        try {
             KeyGenerator kg = KeyGenerator.getInstance("DES");
             kg.init(new SecureRandom());
             SecretKey key = kg.generateKey();
@@ -29,6 +29,7 @@ public class Highscore {
             pw.close();
             oos.writeObject(c.getIV());
             oos.close();
+
         } catch (Exception e) { e.printStackTrace(); }
     }
 
