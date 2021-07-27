@@ -33,7 +33,7 @@ public class Snake extends JFrame {
         setResizable(false);
         pack();
 
-        setTitle("com.dynxsty.snakegame.Snake");
+        setTitle("Snake");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
