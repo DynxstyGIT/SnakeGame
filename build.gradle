@@ -5,13 +5,12 @@ plugins {
 jar {
     manifest {
         attributes(
-                'Main-Class': 'Snake'
+                'Main-Class': 'com.dynxsty.snakegame.Snake'
         )
     }
 }
 
-group 'org.example'
-version '1.0'
+group 'com.dynxsty.snakegame'
 
 repositories {
     mavenCentral()
